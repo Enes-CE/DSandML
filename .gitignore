@@ -1,0 +1,22 @@
+# --- IDE ve Editörler ---
+.idea/
+.vscode/
+*.swp
+*.xml
+
+# --- Python Önbellek ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Veri Bilimi ve Veritabanı ---
+*.db
+*.sqlite3
+.ipynb_checkpoints/
+
+# --- Sistem Dosyaları ---
+.DS_Store
+Thumbs.db
+
+# --- Güvenlik ---
+.env
