@@ -158,6 +158,7 @@ def aggregate_functions(cursor):
     4) Sadece 'New York' ta yaşamayan öğrencileri getirin
 '''
 
+
 def answers(cursor):
     print("############################################")
     print("1) Bütün kursların bilgilerini getirin")
@@ -224,9 +225,6 @@ def answers(cursor):
     cursor.execute("SELECT * FROM Students WHERE city != 'New York'")
     result = cursor.fetchall()
     print(result)
-
-
-
 
 
 def main():
