@@ -3,10 +3,20 @@ import os
 
 
 def create_database():
-    if os.path.exists("students.db"):
-        os.remove("students.db")
+    # 1. Kodun (main.py) olduğu klasörün yolunu al
+    # Bu durumda 'current_dir' senin pythonSQL klasörün olacak
+    current_dir = os.path.dirname(os.path.abspath(__file__))
 
-    conn = sqlite3.connect("students.db")
+    # 2. Dosya yolunu 'pythonSQL/students.db' şeklinde birleştir
+    db_path = os.path.join(current_dir, "students.db")
+
+    # Temizlik: Eğer ana klasörde (DSandML) yanlışlıkla oluşan bir dosya varsa manuel silmelisin,
+    # Ama bu kod artık sadece pythonSQL içine odaklanır.
+    if os.path.exists(db_path):
+        os.remove(db_path)
+
+    # 3. Bağlantıyı tam yol (db_path) üzerinden kur
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     return conn, cursor
 
@@ -131,6 +141,91 @@ def aggregate_functions(cursor):
     print(result)
 
 
+'''
+    Basit
+    1) Bütün kursların bilgilerini getirin
+    2) Sadece eğitmenlerin ismini ve ders ismi bilgilerini getirin
+    3) Sadece 21 yaşındaki öğrencileri getirin
+    4) Sadece Chicago'da yaşayan öğrencileri getirin
+    5) Sadece 'Dr. Anderson' tarafından verilen dersleri getirin
+    6) Sadece ismi 'A' ile başlayan öğrencileri getirin
+    7) Sadece 3 ve üzeri kredi olan dersleri getirin
+
+    Detaylı
+    1) Öğrencileri alphabetic şekilde dizerek getirin
+    2) 20 yaşından büyük öğrencileri, ismine göre sıralayarak getirin
+    3) Sadece 'New York' veya 'Chicago' da yaşayan öğrencileri getirin
+    4) Sadece 'New York' ta yaşamayan öğrencileri getirin
+'''
+
+def answers(cursor):
+    print("############################################")
+    print("1) Bütün kursların bilgilerini getirin")
+    cursor.execute("SELECT * FROM Courses")
+    result = cursor.fetchall()
+    print(result)
+
+    print("############################################")
+    print("2) Sadece eğitmenlerin ismini ve ders ismi bilgilerini getirin")
+    cursor.execute("SELECT instructor_name, course_name FROM Courses")
+    result = cursor.fetchall()
+    print(result)
+
+    print("############################################")
+    print("3) Sadece 21 yaşındaki öğrencileri getirin")
+    cursor.execute("SELECT * FROM Students WHERE age = 21")
+    result = cursor.fetchall()
+    print(result)
+
+    print("############################################")
+    print("4) Sadece Chicago'da yaşayan öğrencileri getirin")
+    cursor.execute("SELECT * FROM Students WHERE city = 'Chicago'")
+    result = cursor.fetchall()
+    print(result)
+
+    print("############################################")
+    print("5) Sadece 'Dr. Anderson' tarafından verilen dersleri getirin")
+    cursor.execute("SELECT * FROM Courses WHERE instructor_name = 'Dr. Anderson'")
+    result = cursor.fetchall()
+    print(result)
+
+    print("############################################")
+    print("6) Sadece ismi 'A' ile başlayan öğrencileri getirin")
+    cursor.execute("SELECT * FROM Students WHERE name LIKE 'A%'")
+    result = cursor.fetchall()
+    print(result)
+
+    print("############################################")
+    print("7) Sadece 3 ve üzeri kredi olan dersleri getirin")
+    cursor.execute("SELECT * FROM Courses WHERE credits >= 3")
+    result = cursor.fetchall()
+    print(result)
+
+    print("############################################")
+    print("1) Öğrencileri alphabetic şekilde dizerek getirin")
+    cursor.execute("SELECT * FROM Students ORDER BY name ASC")
+    result = cursor.fetchall()
+    print(result)
+
+    print("############################################")
+    print("2) 20 yaşından büyük öğrencileri, ismine göre sıralayın")
+    cursor.execute("SELECT * FROM Students WHERE age > 20 ORDER BY name ASC")
+    result = cursor.fetchall()
+    print(result)
+
+    print("############################################")
+    print("3) Sadece 'New York' veya 'Chicago' da yaşayan öğrencileri getirin")
+    cursor.execute("SELECT * FROM Students WHERE city = 'New York' OR city = 'Chicago'")
+    result = cursor.fetchall()
+    print(result)
+
+    print("############################################")
+    print("4) Sadece 'New York' ta yaşamayan öğrencileri getirin")
+    cursor.execute("SELECT * FROM Students WHERE city != 'New York'")
+    result = cursor.fetchall()
+    print(result)
+
+
 
 
 
@@ -143,6 +238,7 @@ def main():
         basic_sql_operations(cursor)
         sql_update_delete_insert_operations(conn, cursor)
         aggregate_functions(cursor)
+        answers(cursor)
         conn.commit()
 
     except sqlite3.Error as e:
